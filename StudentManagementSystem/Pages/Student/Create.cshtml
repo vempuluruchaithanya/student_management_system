@@ -6,3 +6,40 @@
 }
 
 <h1> Add Student </h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Student.FirstName"></label>
+        <input asp-for="Student.FirstName" class="form-control" />
+        <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Student.LastName"></label>
+        <input asp-for="Student.LastName" class="form-control" />
+        <span asp-validation-for="Student.LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Student.ContactNo"></label>
+        <input asp-for="Student.ContactNo" class="form-control" />
+        <span asp-validation-for="Student.ContactNo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Student.Email"></label>
+        <input asp-for="Student.Email" class="form-control" />
+        <span asp-validation-for="Student.Email" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Student.DepartmentId"></label>
+        <select asp-for="Student.DepartmentId" class="form-control" asp-items="Model.Departments"></select>
+        <span asp-validation-for="Student.DepartmentId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
