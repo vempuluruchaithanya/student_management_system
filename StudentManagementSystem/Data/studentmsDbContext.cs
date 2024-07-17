@@ -1,22 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentManagementSystem.Models;
+using StudentManagementSystem.Models.Domain;
 
 namespace StudentManagementSystem.Data
 {
-    public class studentmsDbContext: DbContext
+    public class StudentmsDbContext: DbContext
     {
 
-        public studentmsDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
+        public StudentmsDbContext(DbContextOptions <StudentmsDbContext> dbContextOptions) : base(dbContextOptions) { }
         
-        public DbSet<student> students {  get; set; }
+        public DbSet<Student> Students {  get; set; }
 
-        public DbSet<department> departments { get; set; } 
-
-
-
-        
+        public DbSet<Department> Departments { get; set; } 
 
 
+
+     
 
     }
 }
