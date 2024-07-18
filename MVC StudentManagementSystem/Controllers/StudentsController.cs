@@ -88,7 +88,7 @@ namespace MVC_StudentManagementSystem.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var client = httpClientFactory.CreateClient();
-            var response = await client.GetFromJsonAsync<StudentDto>($"https://localhost:7156/api/students.{id.ToString()}");
+            var response = await client.GetFromJsonAsync<StudentDto>($"https://localhost:7156/api/students/{id.ToString()}");
 
             if (response is not null)
             {
@@ -135,7 +135,7 @@ namespace MVC_StudentManagementSystem.Controllers
             {
                 var client = httpClientFactory.CreateClient();
 
-                var httpResponseMessage = await client.DeleteAsync($"https://localhost:7156/api/students.{request.Id}");
+                var httpResponseMessage = await client.DeleteAsync($"https://localhost:7156/api/students/{request.Id}");
 
                 httpResponseMessage.EnsureSuccessStatusCode();
 
