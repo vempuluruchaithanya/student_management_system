@@ -30,7 +30,7 @@ namespace MVC_StudentManagementSystem.Controllers
 
                 var httpResponseMessage = await client.GetAsync("https://localhost:7156/api/students");
 
-                //httpResponseMessage.EnsureSuccessStatusCode();
+                httpResponseMessage.EnsureSuccessStatusCode();
 
                  response.AddRange(await httpResponseMessage.Content.ReadFromJsonAsync<IEnumerable<StudentDto>>());
 
