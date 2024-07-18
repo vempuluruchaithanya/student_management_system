@@ -1,0 +1,39 @@
+﻿@model MVC_StudentManagementSystem.Models.AddStudentviewModel
+@{
+}
+
+<h1 class="mt-3">Add Student</h1>
+
+<form method="post" class="mt-3">
+
+    <div class="mt-3">
+        <label class="form-label">FirstName</label>
+        <input type="text" class="form-control" asp-for="FirstName"/>
+    </div>
+
+     <div class="mt-3">
+         <label class="form-label">LastName</label>
+        <input type="text" class="form-control" asp-for="LastName" />
+     </div>
+
+     <div class="mt-3">
+        <label class="form-label">ContactNo</label>
+        <input type="text" class="form-control" asp-for="ContactNo" />
+    </div>
+     <div class="mt-3">
+        <label class="form-label">Email</label>
+        <input type="text" class="form-control" asp-for="Email" />
+    </div>
+    <div class="mt-3">
+         <label class="form-label">CreatedOn</label>
+        <input type="text" class="form-control" asp-for="CreatedOn" />
+    </div>
+     <div class="mt-3">
+         <label class="form-label">ModifiedOn</label>
+        <input type="text" class="form-control" asp-for="ModifiedOn" />
+    </div>
+
+
+
+    </div>
+</form>
