@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Update.Internal;
 using StudentManagementSystem.Models.Domain;
+using StudentManagementSystem.Models.DTO;
 using System.Runtime.InteropServices;
 
 namespace StudentManagementSystem.Repositories
@@ -7,14 +8,16 @@ namespace StudentManagementSystem.Repositories
     public interface IStudentRepository
     {
 
-        Task<List<Student>> GetAllAsync();
+        Task<List<Student>> GetAllStudentsAsync();
 
-        Task<Student?> GetByIdAsync(Guid id);
+        Task<Student?> GetByIdStudentsAsync(Guid id);
 
-        Task<Student> CreateAsync(Student student);
+        Task<Student> CreateStudentsAsync(Student student);
 
-        Task<Student?> UpdateAsync(Guid id, Student student);
+        Task<Student?> UpdateStudentsAsync(Guid id, Student student);
 
-        Task<Student?> DeletAsync(Guid id);
+        Task<Student?> DeleteStudentsAsync(Guid id);
+
+        
     }
 }

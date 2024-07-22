@@ -19,8 +19,10 @@ namespace StudentManagementSystem.Models.Domain
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
 
+     
 
-        
+
+
 
 
     }

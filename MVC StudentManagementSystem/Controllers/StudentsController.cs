@@ -145,11 +145,13 @@ namespace MVC_StudentManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                
+
             }
 
             return View("Edit");
+        }
 
+        
 
 
         }
@@ -157,7 +159,7 @@ namespace MVC_StudentManagementSystem.Controllers
 
     }
 
- }
+ 
 
 
 

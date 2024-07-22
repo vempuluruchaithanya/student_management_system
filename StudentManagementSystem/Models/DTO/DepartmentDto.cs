@@ -1,4 +1,6 @@
-﻿namespace StudentManagementSystem.Models.DTO
+﻿using StudentManagementSystem.Models.Domain;
+
+namespace StudentManagementSystem.Models.DTO
 {
     public class DepartmentDto
     {
@@ -11,5 +13,7 @@
 
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
+
+        
     }
 }

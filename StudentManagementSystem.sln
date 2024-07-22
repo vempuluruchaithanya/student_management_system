@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagementSystem", "StudentManagementSystem\StudentManagementSystem.csproj", "{628B2171-2E50-4AF9-BFC4-3BEB2AEF4F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC StudentManagementSystem", "MVC StudentManagementSystem\MVC StudentManagementSystem.csproj", "{E0F31C19-3693-4799-ACD5-37599AB7F5BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI StudentManagementSystem", "MVC StudentManagementSystem\UI StudentManagementSystem.csproj", "{E0F31C19-3693-4799-ACD5-37599AB7F5BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

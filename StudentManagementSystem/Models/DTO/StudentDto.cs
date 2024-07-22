@@ -20,7 +20,9 @@ namespace StudentManagementSystem.Models.DTO
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
 
+        public Guid DepartmentId { get; set; }
 
-       
+
+
     }
 }

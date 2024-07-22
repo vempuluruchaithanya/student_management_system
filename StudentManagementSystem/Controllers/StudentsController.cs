@@ -12,32 +12,67 @@ namespace StudentManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    //[Authorize]
     public class StudentsController : ControllerBase
     {
-        private readonly StudentmsDbContext dbContext;
+        
         private readonly IStudentRepository studentRepository;
 
-        public StudentsController(StudentmsDbContext dbContext, IStudentRepository studentRepository)
+        public StudentsController(IStudentRepository studentRepository)
         {
-            this.dbContext = dbContext;
+            
             this.studentRepository = studentRepository;
         }
 
 
         [HttpGet]
+        //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-
-            var studentsDomain = await studentRepository.GetAllAsync();
-
-
-
-
-            var studentsDto = new List<StudentDto>();
-            foreach (var studentDomain in studentsDomain)
+            try
             {
-                studentsDto.Add(new StudentDto()
+                var studentsDomain = await studentRepository.GetAllStudentsAsync();
+                var studentsDto = new List<StudentDto>();
+                foreach (var studentDomain in studentsDomain)
+                {
+                    studentsDto.Add(new StudentDto()
+                    {
+                        Id = studentDomain.Id,
+                        FirstName = studentDomain.FirstName,
+                        LastName = studentDomain.LastName,
+                        ContactNo = studentDomain.ContactNo,
+                        Email = studentDomain.Email,
+                        CreatedOn = studentDomain.CreatedOn,
+                        ModifiedOn = studentDomain.ModifiedOn,
+                    });
+                }
+                return Ok(studentsDto);
+
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+
+            }
+
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        //[Authorize(Roles = "Reader")]
+
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+
+            try
+            {
+                var studentDomain = await studentRepository.GetByIdStudentsAsync(id);
+
+                if (studentDomain == null)
+                {
+                    return NotFound();
+                }
+                var studentDto = new StudentDto
                 {
                     Id = studentDomain.Id,
                     FirstName = studentDomain.FirstName,
@@ -46,177 +81,154 @@ namespace StudentManagementSystem.Controllers
                     Email = studentDomain.Email,
                     CreatedOn = studentDomain.CreatedOn,
                     ModifiedOn = studentDomain.ModifiedOn,
-                });
+                };
+                return Ok(studentDto);
+
             }
-
-            return Ok(studentsDto);
-        }
-
-        [HttpGet]
-        [Route("{id:Guid}")]
-
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
-        {
-            var studentDomain = await studentRepository.GetByIdAsync(id);
-
-            if (studentDomain == null)
+            catch (Exception ex)
             {
+
                 return NotFound();
+
             }
-            var studentDto = new StudentDto
-            {
-                Id = studentDomain.Id,
-                FirstName = studentDomain.FirstName,
-                LastName = studentDomain.LastName,
-                ContactNo = studentDomain.ContactNo,
-                Email = studentDomain.Email,
-                CreatedOn = studentDomain.CreatedOn,
-                ModifiedOn = studentDomain.ModifiedOn,
-
-
-            };
-
-            return Ok(studentDto);
-
-
 
         }
 
 
         [HttpPost]
+       // [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> Create([FromBody] AddStudentRequestDto addStudentRequestDto)
         {
-            
-
-            var studentDomainModel = new Student
+            try 
             {
-                FirstName = addStudentRequestDto.FirstName,
-                LastName = addStudentRequestDto.LastName,
-                ContactNo = addStudentRequestDto.ContactNo,
-                Email = addStudentRequestDto.Email,
-                CreatedOn = addStudentRequestDto.CreatedOn,
-                ModifiedOn = addStudentRequestDto.ModifiedOn
-                
-                           
-            };
 
-            studentDomainModel = await studentRepository.CreateAsync(studentDomainModel);
+                var studentDomainModel = new Student
+                {
+                    FirstName = addStudentRequestDto.FirstName,
+                    LastName = addStudentRequestDto.LastName,
+                    ContactNo = addStudentRequestDto.ContactNo,
+                    Email = addStudentRequestDto.Email,
+                    CreatedOn = addStudentRequestDto.CreatedOn,
+                    ModifiedOn = addStudentRequestDto.ModifiedOn
+                };
 
-            var studentDto = new StudentDto
+                studentDomainModel = await studentRepository.CreateStudentsAsync(studentDomainModel);
+
+                var studentDto = new StudentDto
+                {
+                    Id = studentDomainModel.Id,
+                    FirstName = studentDomainModel.FirstName,
+                    LastName = studentDomainModel.LastName,
+                    ContactNo = studentDomainModel.ContactNo,
+                    Email = studentDomainModel.Email,
+                    CreatedOn = studentDomainModel.CreatedOn,
+                    ModifiedOn = studentDomainModel.ModifiedOn
+                };
+
+                return CreatedAtAction(nameof(GetById), new { id = studentDto.Id }, studentDto);
+
+            }
+
+            catch (Exception ex) 
             {
-                Id = studentDomainModel.Id,
-                FirstName = studentDomainModel.FirstName,
-                LastName = studentDomainModel.LastName,
-                ContactNo = studentDomainModel.ContactNo,
-                Email= studentDomainModel.Email,
-                CreatedOn = studentDomainModel.CreatedOn,
-                ModifiedOn = studentDomainModel.ModifiedOn
-              
-                            
-            };
+                return NotFound();
 
-            return CreatedAtAction(nameof(GetById), new { id = studentDto.Id }, studentDto);
-
-
-
-
-
-
-
-
-    }
+            }
+        }
 
         [HttpPut]
         [Route("{id:Guid}")]
+       // [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateStudentRequestDto updateStudentRequestDto)
         {
-            var studentDomainModel = new Student
-            { 
-                FirstName = updateStudentRequestDto.FirstName,
-                LastName = updateStudentRequestDto.LastName,
-                ContactNo= updateStudentRequestDto.ContactNo,
-                Email= updateStudentRequestDto.Email,
-                CreatedOn = updateStudentRequestDto.CreatedOn,
-                ModifiedOn= updateStudentRequestDto.ModifiedOn
-            
-            
-            
-            };
-
-            studentDomainModel = await studentRepository.UpdateAsync(id, studentDomainModel);
-            if(studentDomainModel == null)
+            try
             {
-                return NotFound();
+                var studentDomainModel = new Student
+                {
+                    FirstName = updateStudentRequestDto.FirstName,
+                    LastName = updateStudentRequestDto.LastName,
+                    ContactNo = updateStudentRequestDto.ContactNo,
+                    Email = updateStudentRequestDto.Email,
+                    CreatedOn = updateStudentRequestDto.CreatedOn,
+                    ModifiedOn = updateStudentRequestDto.ModifiedOn
+
+                };
+
+                studentDomainModel = await studentRepository.UpdateStudentsAsync(id, studentDomainModel);
+                if (studentDomainModel == null)
+                {
+                    return NotFound();
+                }
+
+                studentDomainModel.FirstName = updateStudentRequestDto.FirstName;
+                studentDomainModel.LastName = updateStudentRequestDto.LastName;
+                studentDomainModel.ContactNo = updateStudentRequestDto.ContactNo;
+                studentDomainModel.Email = updateStudentRequestDto.Email;
+                studentDomainModel.CreatedOn = updateStudentRequestDto.CreatedOn;
+                studentDomainModel.ModifiedOn = updateStudentRequestDto.ModifiedOn;
+
+                var studentDto = new StudentDto
+                {
+                    Id = studentDomainModel.Id,
+                    FirstName = studentDomainModel.FirstName,
+                    LastName = studentDomainModel.LastName,
+                    ContactNo = studentDomainModel.ContactNo,
+                    Email = studentDomainModel.Email,
+                    CreatedOn = studentDomainModel.CreatedOn,
+                    ModifiedOn = studentDomainModel.ModifiedOn,
+                };
+                return Ok(studentDto);
+
             }
 
-            studentDomainModel.FirstName = updateStudentRequestDto.FirstName;
-            studentDomainModel.LastName = updateStudentRequestDto.LastName;
-            studentDomainModel.ContactNo = updateStudentRequestDto.ContactNo;
-            studentDomainModel.Email = updateStudentRequestDto.Email;
-            studentDomainModel.CreatedOn = updateStudentRequestDto.CreatedOn;
-            studentDomainModel.ModifiedOn = updateStudentRequestDto.ModifiedOn;
-            
-
-            dbContext.SaveChanges();
-
-            var studentDto = new StudentDto
+            catch (Exception ex) 
             {
-                Id = studentDomainModel.Id,
-                FirstName = studentDomainModel.FirstName,
-                LastName = studentDomainModel.LastName,
-                ContactNo = studentDomainModel.ContactNo,
-                Email = studentDomainModel.Email,
-                CreatedOn = studentDomainModel.CreatedOn,
-                ModifiedOn = studentDomainModel.ModifiedOn,
-                
+                return NotFound();
 
-            };
-
-
-            return Ok(studentDto);
+            }
+            
         }
 
 
         [HttpDelete]
         [Route("{id:Guid}")]
+      // [Authorize(Roles = "Writer,Reader")]
 
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var studentDomainModel = await studentRepository.DeletAsync(id);
+            try
+            {
+                var studentDomainModel = await studentRepository.DeleteStudentsAsync(id);
+                if (studentDomainModel == null)
+                {
+                    return NotFound();
+                }
+                var studentDto = new StudentDto
+                {
+                    Id = studentDomainModel.Id,
+                    FirstName = studentDomainModel.FirstName,
+                    LastName = studentDomainModel.LastName,
+                    ContactNo = studentDomainModel.ContactNo,
+                    Email = studentDomainModel.Email,
+                    CreatedOn = studentDomainModel.CreatedOn,
+                    ModifiedOn = studentDomainModel.ModifiedOn,
+                };
 
-            if(studentDomainModel == null)
+                return Ok(studentDto);
+            }
+            catch (Exception ex)
+
             {
                 return NotFound();
             }
-
            
-
-            var studentDto = new StudentDto
-            {
-                Id = studentDomainModel.Id,
-                FirstName = studentDomainModel.FirstName,
-                LastName = studentDomainModel.LastName,
-                ContactNo = studentDomainModel.ContactNo,
-                Email = studentDomainModel.Email,
-                CreatedOn = studentDomainModel.CreatedOn,
-                ModifiedOn = studentDomainModel.ModifiedOn,
-                
-
-            };
-
-            return Ok(studentDto);
-
-
-
-
 
         }
 
-
-
     }
 }
+
 
 
